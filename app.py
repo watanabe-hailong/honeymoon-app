@@ -23,7 +23,7 @@ CITY_WIKI = {
     "バルセロナ 🇪🇸":   "Sagrada_Família",
     "パリ 🇫🇷":         "Eiffel_Tower",
     "ローマ 🇮🇹":       "Colosseum",
-    "ヴェネツィア 🇮🇹": "Grand_Canal,_Venice",
+    "ヴェネツィア 🇮🇹": "Rialto_Bridge",
     "イスタンブール 🇹🇷": "Sultan_Ahmed_Mosque",
     "カッパドキア 🇹🇷":  "Cappadocia",
     "アテネ 🇬🇷":       "Acropolis_of_Athens",
@@ -382,6 +382,67 @@ st.markdown("""
     }
     .sheets-link:hover { opacity: 0.85; }
 
+    /* ── ダッシュボード ── */
+    .dash-stat-card {
+        background: linear-gradient(135deg, #1B2A4A 0%, #2D4A7A 100%);
+        border-radius: 14px;
+        padding: 20px 14px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        animation: fadeUp 0.35s ease;
+        color: white !important;
+    }
+    .dash-stat-card * { color: white !important; }
+    .dash-stat-value {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: #C9974C !important;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+    .dash-stat-label {
+        font-size: 0.72rem;
+        color: rgba(255,255,255,0.72) !important;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .flight-seg {
+        border-radius: 10px;
+        padding: 10px 6px;
+        text-align: center;
+        color: white !important;
+        min-height: 76px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .flight-seg * { color: white !important; }
+    .day-dash-card {
+        background: white;
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        box-shadow: var(--shadow);
+        border-left: 5px solid var(--gold);
+        animation: fadeUp 0.35s ease;
+        color: var(--text) !important;
+    }
+    .day-dash-card * { color: var(--text) !important; }
+    .route-card {
+        background: white;
+        border-radius: 12px;
+        padding: 12px 18px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 10px rgba(27,42,74,0.08);
+        border-left: 4px solid var(--sky);
+        color: var(--text) !important;
+        transition: transform 0.2s;
+    }
+    .route-card * { color: var(--text) !important; }
+    .route-card:hover { transform: translateX(4px); }
+
     /* ── アニメーション ── */
     @keyframes fadeUp {
         from { opacity: 0; transform: translateY(12px); }
@@ -467,7 +528,7 @@ TRIPS = {
                     ("プロセッコ", "イタリアのスパークリングワイン。乾杯に！🥂"),
                 ],
                 "tip": "ゴンドラは1艘€80〜100（2人で乗れる）。日没前後が最ロマンチック",
-                "move_next": "✈️ ヴェネツィア → 東京（経由便 約15時間）",
+                "move_next": "✈️ ヴェネツィア→ミラノ（MXP）電車2.5時間 → 東京（経由便 約15〜17時間）※ミラノ出発が便数・価格ともに有利",
             },
         ],
     },
@@ -619,7 +680,7 @@ TRIPS = {
                     ("クロアチアワイン", "ディンガッチ（赤）が有名。地元のコナヴレ産も"),
                 ],
                 "tip": "城壁ウォークは朝8時が空いていて光も美しい。夏は暑いので早朝がベスト",
-                "move_next": "✈️ ドゥブロヴニク → 東京（帰国）",
+                "move_next": "✈️ ドゥブロヴニク → フランクフルト or アムステルダム（乗継） → 東京（帰国・所要約22時間）※DBV直接帰国便なし・欧州ハブ経由必須",
             },
         ],
     },
@@ -690,7 +751,7 @@ BUDGET = {
 
 BUDGET_NOTES = {
     "🔴 Year 1（スペイン・フランス・イタリア）": {
-        "✈️ 航空券（往復）":    "GWはピーク運賃。1年前早期予約で¥180,000〜、直前は¥300,000超も。カタール/エミレーツ航空経由が多い",
+        "✈️ 航空券（往復）":    "GWは繁忙期。6〜8ヶ月前の早期予約でカタール航空¥140,000〜が目安。直前は¥250,000超も。ドーハ/ドバイ経由・約17〜21時間",
         "🏨 ホテル（13泊・1人分）": "3〜4つ星ホテル2人部屋の1人分。パリ・ヴェネツィアは€170〜200/泊と高め",
         "🍽️ 食費":           "朝€8+昼€15+夕€40の想定。現地カフェ・市場活用で節約可能",
         "🎟️ 観光・入場料":      "サグラダ・ファミリア€26、バチカン€30、コロッセオ€18、ルーブル€22など",
@@ -734,6 +795,54 @@ BUDGET_SAVINGS = {
         "アムステルダムは自転車レンタル（€15/日）で交通費を大幅削減",
         "キューケンホフは事前オンライン購入で€2〜3割引",
     ],
+}
+
+TRIP_DEPARTURE_DATES = {
+    "🔴 Year 1 — 2027年 GW｜スペイン・フランス・イタリア": datetime(2027, 4, 28),
+    "🔵 Year 2 — 2028年 SW｜トルコ・ギリシャ":            datetime(2028, 9, 14),
+    "🟢 Year 3 — 2029年 GW｜中欧・クロアチア":            datetime(2029, 4, 27),
+}
+
+FLIGHT_INFO = {
+    "🔴 Year 1 — 2027年 GW｜スペイン・フランス・イタリア": {
+        "airline": "カタール航空（QR）推奨",
+        "route":   "成田 → ドーハ → バルセロナ",
+        "budget_est": "¥140,000〜170,000（往復・GW）",
+        "total_hours": 21.0,
+        "segments": [
+            {"label": "成田→ドーハ",         "hours": 10.5, "type": "flight",   "icon": "✈️"},
+            {"label": "ドーハ 乗り継ぎ",       "hours":  2.5, "type": "layover",  "icon": "⏳"},
+            {"label": "ドーハ→バルセロナ",    "hours":  7.0, "type": "flight",   "icon": "✈️"},
+            {"label": "空港→ホテル",           "hours":  1.0, "type": "arrival",  "icon": "🏨"},
+        ],
+        "tip": "深夜出発便が多い。機内で積極的に仮眠し、バルセロナ到着後そのまま観光できるコンディションを整えて",
+        "return_note": "帰路はミラノ（MXP）出発が便数・価格ともに有利。ヴェネツィア→ミラノは電車2.5時間",
+    },
+    "🔵 Year 2 — 2028年 SW｜トルコ・ギリシャ": {
+        "airline": "トルコ航空（TK）直行",
+        "route":   "成田 → イスタンブール（直行）",
+        "budget_est": "¥100,000〜150,000（往復・SW）",
+        "total_hours": 13.5,
+        "segments": [
+            {"label": "成田→イスタンブール（直行）", "hours": 12.0, "type": "flight",   "icon": "✈️"},
+            {"label": "空港→市内",                   "hours":  1.0, "type": "transfer", "icon": "🚌"},
+            {"label": "イスタンブール到着",           "hours":  0.5, "type": "arrival",  "icon": "🕌"},
+        ],
+        "tip": "3年間で最も快適なフライト。トルコ航空は機内食・サービスが高評価。SW（9月）は航空券もGWより安め",
+        "return_note": "帰路はサントリーニ→アテネ経由→成田。アテネ発JAL/ANA共同運航便も選択肢",
+    },
+    "🟢 Year 3 — 2029年 GW｜中欧・クロアチア": {
+        "airline": "KLM（KL）直行",
+        "route":   "成田 → アムステルダム（直行）",
+        "budget_est": "¥130,000〜180,000（往復・GW）",
+        "total_hours": 12.0,
+        "segments": [
+            {"label": "成田→アムステルダム（直行）", "hours": 11.5, "type": "flight",   "icon": "✈️"},
+            {"label": "空港→市内",                    "hours":  0.5, "type": "transfer", "icon": "🚇"},
+        ],
+        "tip": "3年間で最短フライト（約11.5h）。KLMは日本人に評判よく快適。GW到着後すぐキューケンホフ（チューリップ）へ！",
+        "return_note": "帰路はドゥブロヴニク→フランクフルト or アムステルダム経由で帰国（DBVは直接帰国便なし）",
+    },
 }
 
 def make_map(trip_data, color_map={"red": "#e74c3c", "blue": "#2980b9", "green": "#27ae60"}):
@@ -784,7 +893,133 @@ st.sidebar.markdown(f"""
 **🏙️ 都市数:** {len(trip['cities'])}都市
 """)
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🗺️ マップ", "📅 しおり", "🍽️ グルメ", "🚗 移動", "✅ 準備 & 予算"])
+tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "📊 ダッシュボード", "🗺️ マップ", "📅 しおり", "🍽️ グルメ", "🚗 移動", "✅ 準備 & 予算"
+])
+
+# ── Tab0: ダッシュボード ──
+with tab0:
+    fi = FLIGHT_INFO.get(trip_name, {})
+    dep_date = TRIP_DEPARTURE_DATES.get(trip_name)
+    days_until = (dep_date.date() - datetime.now().date()).days if dep_date else 0
+    if "Year 1" in trip_name:
+        bk = next(k for k in BUDGET if "Year 1" in k)
+    elif "Year 2" in trip_name:
+        bk = next(k for k in BUDGET if "Year 2" in k)
+    else:
+        bk = next(k for k in BUDGET if "Year 3" in k)
+    total_budget = sum(BUDGET[bk].values())
+    per_day = total_budget // trip["days"]
+    first_city = trip["cities"][0]
+
+    # ── 統計カード ──
+    c1, c2, c3, c4 = st.columns(4)
+    stat_items = [
+        (f"{trip['days']}日間",    "📅 旅行日数"),
+        (f"{len(trip['cities'])}都市", "🏙️ 訪問都市"),
+        (f"¥{total_budget // 10000}万", "💴 1人合計予算"),
+        (f"{'あと ' + f'{days_until:,}日' if days_until > 0 else '出発済！'}", "✈️ 出発まで"),
+    ]
+    for col, (val, lbl) in zip([c1, c2, c3, c4], stat_items):
+        with col:
+            st.markdown(
+                f'<div class="dash-stat-card">'
+                f'<div class="dash-stat-value">{val}</div>'
+                f'<div class="dash-stat-label">{lbl}</div>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── フライトタイムライン ──
+    st.markdown(f"#### ✈️ 出発旅程 — {fi.get('route', '')}")
+    st.caption(f"🛩 {fi.get('airline', '')}　｜　総所要時間 **{fi.get('total_hours', '')}時間**　｜　目安 {fi.get('budget_est', '')}")
+
+    segs = [s for s in fi.get("segments", []) if s["hours"] > 0]
+    seg_color = {"flight": "#4A7FB5", "layover": "#C9974C", "transfer": "#4A8063", "arrival": "#D96B5A"}
+    if segs:
+        seg_cols = st.columns([s["hours"] for s in segs])
+        for col, seg in zip(seg_cols, segs):
+            with col:
+                c = seg_color.get(seg["type"], "#888")
+                st.markdown(
+                    f'<div class="flight-seg" style="background:{c};">'
+                    f'<div style="font-size:1.35rem;">{seg["icon"]}</div>'
+                    f'<div style="font-size:0.67rem;font-weight:600;line-height:1.3;margin:3px 0;">{seg["label"]}</div>'
+                    f'<div style="font-size:0.63rem;opacity:0.85;">{seg["hours"]}h</div>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+        # 凡例
+        st.markdown(
+            '<div style="display:flex;gap:14px;margin-top:8px;font-size:0.78rem;color:#718096;">'
+            '<span><span style="display:inline-block;width:10px;height:10px;background:#4A7FB5;border-radius:3px;margin-right:4px;"></span>フライト</span>'
+            '<span><span style="display:inline-block;width:10px;height:10px;background:#C9974C;border-radius:3px;margin-right:4px;"></span>乗り継ぎ</span>'
+            '<span><span style="display:inline-block;width:10px;height:10px;background:#4A8063;border-radius:3px;margin-right:4px;"></span>移動</span>'
+            '<span><span style="display:inline-block;width:10px;height:10px;background:#D96B5A;border-radius:3px;margin-right:4px;"></span>到着</span>'
+            '</div>',
+            unsafe_allow_html=True
+        )
+
+    col_tip, col_ret = st.columns(2)
+    with col_tip:
+        st.markdown(
+            f'<div class="tip-box" style="margin-top:12px;">💡 <b>フライトのコツ：</b> {fi.get("tip", "")}</div>',
+            unsafe_allow_html=True
+        )
+    with col_ret:
+        if fi.get("return_note"):
+            st.markdown(
+                f'<div class="tip-box" style="margin-top:12px;background:linear-gradient(135deg,#EFF4FF,#F5F8FF);border-color:#A8BEDB;">🔄 <b>帰路のポイント：</b> {fi["return_note"]}</div>',
+                unsafe_allow_html=True
+            )
+
+    st.markdown("---")
+
+    # ── 最初の都市・初日からの日程 ──
+    col_days, col_info = st.columns([3, 2])
+    with col_days:
+        st.markdown(f"#### 📅 {first_city['name']} の日程（{first_city['stay']}）")
+        day_colors = ["#C9974C", "#4A7FB5", "#4A8063", "#D96B5A"]
+        for i, (day_label, day_plan) in enumerate(first_city["itinerary"]):
+            bc = day_colors[i % len(day_colors)]
+            st.markdown(
+                f'<div class="day-dash-card">'
+                f'<span style="display:inline-block;background:{bc};color:white;font-weight:700;'
+                f'font-size:0.75rem;padding:3px 12px;border-radius:20px;margin-bottom:8px;">{day_label}</span>'
+                f'<p style="margin:0;font-size:0.91rem;line-height:1.6;">{day_plan}</p>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+        st.markdown(
+            f'<div class="tip-box">💡 <b>現地のコツ：</b> {first_city["tip"]}</div>',
+            unsafe_allow_html=True
+        )
+
+    with col_info:
+        st.markdown("#### 🗺️ 全体旅程サマリー")
+        city_icons = ["①", "②", "③", "④"]
+        for i, city in enumerate(trip["cities"]):
+            icon = city_icons[i] if i < len(city_icons) else "•"
+            st.markdown(
+                f'<div class="route-card">'
+                f'<b style="color:#1B2A4A;">{icon} {city["name"]}</b>'
+                f'<span style="color:#718096;font-size:0.82rem;margin-left:8px;">({city["stay"]})</span>'
+                f'<div style="color:#4A5568;font-size:0.8rem;margin-top:5px;">{city["move_next"]}</div>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+
+        # 1日あたり予算
+        st.markdown(
+            f'<div class="budget-box" style="margin-top:16px;padding:18px 16px;">'
+            f'<p style="color:#C9974C;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;margin:0 0 4px;">1日あたり予算（目安）</p>'
+            f'<h3 style="color:white;margin:0;font-family:Playfair Display,serif;font-size:1.8rem;">¥{per_day:,}</h3>'
+            f'<p style="color:rgba(255,255,255,0.6);margin:4px 0 0;font-size:0.8rem;">2人合計 ¥{per_day*2:,} / 日</p>'
+            f'</div>',
+            unsafe_allow_html=True
+        )
 
 # ── Tab1: マップ ──
 with tab1:
@@ -858,14 +1093,21 @@ with tab4:
         st.markdown(f'<div class="move-card"><b style="color:#4A7FB5;font-size:1rem;">📍 {city["name"]}</b><br><span style="color:#4A5568;font-size:0.88rem;margin-top:4px;display:block;">{city["move_next"]}</span></div>', unsafe_allow_html=True)
 
     st.markdown("---")
-    st.markdown("**✈️ 東京からの直行便**")
+    st.markdown("**✈️ 東京からの主要国際線（実績ベース）**")
     data = {
-        "路線": ["成田→イスタンブール", "成田→アムステルダム", "成田→バルセロナ（経由）", "成田→パリ（経由）"],
-        "所要時間": ["約12時間", "約11時間", "約13〜16時間", "約12〜14時間"],
-        "航空会社": ["トルコ航空", "KLM", "カタール航空/エミレーツ等", "Air France/JAL等"],
-        "目安運賃(往復)": ["¥80,000〜150,000", "¥90,000〜160,000", "¥100,000〜170,000", "¥90,000〜160,000"],
+        "路線": [
+            "成田→イスタンブール（直行）",
+            "成田→アムステルダム（直行）",
+            "成田→バルセロナ（ドーハ/ドバイ経由）",
+            "成田→ローマ（ドーハ/ドバイ経由）",
+        ],
+        "所要時間": ["約12時間", "約11〜12時間", "約17〜21時間（乗継込）", "約15〜19時間（乗継込）"],
+        "主な航空会社": ["トルコ航空（直行）", "KLM（直行）", "カタール航空/エミレーツ", "カタール航空/エミレーツ"],
+        "目安運賃・通常期(往復)": ["¥100,000〜160,000", "¥100,000〜170,000", "¥120,000〜170,000", "¥110,000〜160,000"],
+        "GW/SW 繁忙期": ["¥130,000〜190,000", "¥130,000〜190,000", "¥140,000〜200,000", "¥130,000〜190,000"],
     }
     st.dataframe(pd.DataFrame(data), use_container_width=True, hide_index=True)
+    st.caption("※ GWは6〜8ヶ月前の早期予約が必須。直前購入は1.5〜2倍に跳ね上がることがある")
 
 # ── Tab5: チェックリスト & 予算 ──
 with tab5:
