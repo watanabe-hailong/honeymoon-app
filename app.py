@@ -510,17 +510,77 @@ CHECKLIST = {
 
 BUDGET = {
     "🔴 Year 1（スペイン・フランス・イタリア）": {
-        "航空券（往復）": 150000, "ホテル（13泊）": 130000,
-        "食費": 70000, "観光・入場料": 40000, "域内交通": 30000, "お土産・雑費": 30000,
+        "✈️ 航空券（往復）":    230000,
+        "🏨 ホテル（13泊・1人分）": 160000,
+        "🍽️ 食費":           130000,
+        "🎟️ 観光・入場料":      55000,
+        "🚆 域内交通":          45000,
+        "🎁 お土産・旅行保険・雑費": 45000,
     },
     "🔵 Year 2（トルコ・ギリシャ）": {
-        "航空券（往復）": 120000, "ホテル（11泊）": 100000,
-        "食費": 50000, "観光・入場料（気球含む）": 60000, "域内交通": 25000, "お土産・雑費": 25000,
+        "✈️ 航空券（往復）":    160000,
+        "🏨 ホテル（11泊・1人分）": 130000,
+        "🍽️ 食費":           100000,
+        "🎟️ 観光・入場料（熱気球含む）": 80000,
+        "🚆 域内交通":          40000,
+        "🎁 お土産・旅行保険・雑費": 35000,
     },
     "🟢 Year 3（中欧・クロアチア）": {
-        "航空券（往復）": 130000, "ホテル（13泊）": 110000,
-        "食費": 55000, "観光・入場料": 35000, "域内交通": 25000, "お土産・雑費": 25000,
+        "✈️ 航空券（往復）":    210000,
+        "🏨 ホテル（13泊・1人分）": 145000,
+        "🍽️ 食費":           115000,
+        "🎟️ 観光・入場料":      50000,
+        "🚆 域内交通":          45000,
+        "🎁 お土産・旅行保険・雑費": 45000,
     },
+}
+
+BUDGET_NOTES = {
+    "🔴 Year 1（スペイン・フランス・イタリア）": {
+        "✈️ 航空券（往復）":    "GWはピーク運賃。1年前早期予約で¥180,000〜、直前は¥300,000超も。カタール/エミレーツ航空経由が多い",
+        "🏨 ホテル（13泊・1人分）": "3〜4つ星ホテル2人部屋の1人分。パリ・ヴェネツィアは€170〜200/泊と高め",
+        "🍽️ 食費":           "朝€8+昼€15+夕€40の想定。現地カフェ・市場活用で節約可能",
+        "🎟️ 観光・入場料":      "サグラダ・ファミリア€26、バチカン€30、コロッセオ€18、ルーブル€22など",
+        "🚆 域内交通":          "バルセロナ→パリ€80・パリ→ローマ€100・ローマ→ヴェネツィア新幹線€50+各都市内交通",
+        "🎁 お土産・旅行保険・雑費": "海外旅行保険¥15,000+お土産¥20,000+現地雑費¥10,000",
+    },
+    "🔵 Year 2（トルコ・ギリシャ）": {
+        "✈️ 航空券（往復）":    "SW（9月）はGWより安い。トルコ航空直行便¥130,000〜¥180,000が目安",
+        "🏨 ホテル（11泊・1人分）": "サントリーニが高め（€200〜250/泊）。洞窟ホテルもプレミアム価格€120〜150/泊",
+        "🍽️ 食費":           "トルコは安い（€30〜40/日）。サントリーニは観光地価格で€60〜70/日",
+        "🎟️ 観光・入場料（熱気球含む）": "熱気球¥29,000が最大の出費。カタマランクルーズ€80、遺跡入場料合計€80程度",
+        "🚆 域内交通":          "国内線3本（イスタンブール→カッパドキア・カッパドキア→アテネ・アテネ→サントリーニ）合計€250程度",
+        "🎁 お土産・旅行保険・雑費": "海外旅行保険¥12,000+絨毯・陶器などトルコみやげ多め+雑費",
+    },
+    "🟢 Year 3（中欧・クロアチア）": {
+        "✈️ 航空券（往復）":    "GW。KLM成田→アムステルダム直行便¥190,000〜¥250,000。早期予約推奨",
+        "🏨 ホテル（13泊・1人分）": "プラハが安い（€80〜90/泊）。ドゥブロヴニクは観光地で高め（€150〜160/泊）",
+        "🍽️ 食費":           "プラハは€30/日と格安。アムステルダム・ウィーン・ドゥブロヴニクは€55〜65/日",
+        "🎟️ 観光・入場料":      "キューケンホフ€20、ゴッホ美術館€22、シェーンブルン€20、城壁ウォーク€35など",
+        "🚆 域内交通":          "アムステルダム→プラハ€90・プラハ→ウィーン電車€40・ウィーン→ドゥブロヴニク€120+各都市内交通",
+        "🎁 お土産・旅行保険・雑費": "海外旅行保険¥15,000+お土産¥20,000+現地雑費¥10,000",
+    },
+}
+
+BUDGET_SAVINGS = {
+    "🔴 Year 1（スペイン・フランス・イタリア）": [
+        "航空券は1年前購入で¥50,000〜¥70,000節約可能",
+        "ホテルをAirbnbにすると30〜40%削減",
+        "ローマ→ヴェネツィアは新幹線の早割（Italo/Trenitalia）が格安",
+        "ランチはバルのタパス・ピッツァで€10以下に抑えられる",
+    ],
+    "🔵 Year 2（トルコ・ギリシャ）": [
+        "SW（9月）はGWより航空券が¥50,000〜¥70,000安い",
+        "サントリーニはフィラ泊よりイア以外の場所で宿泊すると半額以下も",
+        "熱気球は代理店より現地直接予約が安い場合あり",
+        "アテネ→サントリーニはフェリー（€40）が飛行機より格安",
+    ],
+    "🟢 Year 3（中欧・クロアチア）": [
+        "プラハは物価が安く、1日€30で十分食べられる",
+        "ウィーンのオペラ立見席は€5〜10で本場の雰囲気を体験できる",
+        "アムステルダムは自転車レンタル（€15/日）で交通費を大幅削減",
+        "キューケンホフは事前オンライン購入で€2〜3割引",
+    ],
 }
 
 def make_map(trip_data, color_map={"red": "#e74c3c", "blue": "#2980b9", "green": "#27ae60"}):
@@ -634,19 +694,17 @@ with tab5:
         st.subheader("💰 予算シミュレーター（1人あたり）")
         selected_trip = st.selectbox("旅行を選択", list(BUDGET.keys()), key="budget_trip")
 
-        # Sheetsから読み込んだ値をsession_stateに保持
         state_key = f"budget_loaded_{selected_trip}"
         if state_key not in st.session_state:
             st.session_state[state_key] = None
 
-        # ── Sheetsリンク ──
         st.markdown(
             '<a href="https://docs.google.com/spreadsheets/d/1eG_r-ylF9xc40sg717ZBxBQ9-zrPoMpTi32vovSCfZ4/edit" '
             'target="_blank" class="sheets-link">📊 Google スプレッドシートを開く →</a>',
             unsafe_allow_html=True,
         )
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        # ── Sheets操作ボタン ──
         bc1, bc2 = st.columns(2)
         with bc1:
             if st.button("📥 Sheetsから読み込む", use_container_width=True):
@@ -658,16 +716,17 @@ with tab5:
                 else:
                     st.warning("Sheetsにデータがありません")
 
-        # 入力フォーム（Sheetsから読んだ値があれば上書き）
         base = st.session_state[state_key] or BUDGET[selected_trip]
+        notes = BUDGET_NOTES.get(selected_trip, {})
         total = 0
         new_budget = {}
         for item, default in BUDGET[selected_trip].items():
             val = st.number_input(
-                f"{item} (円)",
+                f"{item}",
                 value=int(base.get(item, default)),
                 step=5000,
                 key=f"budget_{selected_trip}_{item}",
+                help=notes.get(item, ""),
             )
             new_budget[item] = val
             total += val
@@ -680,9 +739,26 @@ with tab5:
                 st.session_state[state_key] = new_budget
 
         st.markdown("---")
-        st.markdown(f'<div class="budget-box"><p style="color:#C9974C;font-size:0.8rem;letter-spacing:3px;text-transform:uppercase;margin:0 0 8px;">Total Budget</p><h2 style="color:white;margin:0;font-family:Playfair Display,serif;font-size:2rem;">¥{total:,}</h2><p style="color:rgba(255,255,255,0.7);margin:6px 0 0;font-size:0.9rem;">2人合計 ¥{total*2:,}</p></div>', unsafe_allow_html=True)
+        default_total = sum(BUDGET[selected_trip].values())
+        diff = total - default_total
+        diff_str = f"（目安比 {'＋' if diff >= 0 else '－'}¥{abs(diff):,}）" if diff != 0 else "（目安通り）"
+        st.markdown(
+            f'<div class="budget-box">'
+            f'<p style="color:#C9974C;font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;margin:0 0 6px;">1人あたり合計</p>'
+            f'<h2 style="color:white;margin:0;font-family:Playfair Display,serif;font-size:2.2rem;">¥{total:,}</h2>'
+            f'<p style="color:rgba(255,255,255,0.6);margin:6px 0 4px;font-size:0.85rem;">2人合計 ¥{total*2:,}</p>'
+            f'<p style="color:rgba(201,151,76,0.85);font-size:0.8rem;margin:0;">{diff_str}</p>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
         st.markdown("---")
         st.markdown("**📊 内訳グラフ**")
-        df = pd.DataFrame({"項目": list(new_budget.keys()), "金額": list(new_budget.values())})
+        clean_labels = {k: k.split(" ", 1)[-1] for k in new_budget}
+        df = pd.DataFrame({"項目": list(clean_labels.values()), "金額": list(new_budget.values())})
         st.bar_chart(df.set_index("項目"))
+
+        st.markdown("---")
+        st.markdown("**💡 節約のコツ**")
+        for tip in BUDGET_SAVINGS.get(selected_trip, []):
+            st.markdown(f'<div class="tip-box" style="margin-bottom:8px;">💡 {tip}</div>', unsafe_allow_html=True)
