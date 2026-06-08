@@ -34,6 +34,68 @@ CITY_WIKI = {
     "ドゥブロヴニク 🇭🇷": "Dubrovnik",
 }
 
+DISH_WIKI = {
+    "パエリア":              "Paella",
+    "タパス":                "Tapas",
+    "クレマ・カタラナ":      "Crema_catalana",
+    "パン・コン・トマテ":    "Pa_amb_tomàquet",
+    "サングリア":            "Sangria",
+    "クロワッサン":          "Croissant",
+    "エスカルゴ":            "Escargot",
+    "フォアグラ":            "Foie_gras",
+    "マカロン":              "Macaron",
+    "ワイン＆チーズ":        "French_wine",
+    "カルボナーラ":          "Carbonara",
+    "カチョ・エ・ペペ":      "Cacio_e_pepe",
+    "ジェラート":            "Gelato",
+    "ピッツァ・マルゲリータ": "Pizza_Margherita",
+    "ティラミス":            "Tiramisu",
+    "チケッティ":            "Cicchetti",
+    "イカ墨リゾット":        "Risotto_al_nero_di_seppia",
+    "スプリッツ・アペロール": "Aperol_spritz",
+    "フリット・ミスト":      "Fritto_misto",
+    "プロセッコ":            "Prosecco",
+    "ケバブ":                "Kebab",
+    "バクラヴァ":            "Baklava",
+    "チャイ":                "Turkish_tea",
+    "メゼ":                  "Meze",
+    "バリック・エクメキ":    "Balık_ekmek",
+    "テスティ・ケバブ":      "Testi_kebabı",
+    "ギョズレメ":            "Gözleme",
+    "トルコアイス":          "Dondurma",
+    "ローカルワイン":        "Wine",
+    "朝食ビュッフェ":        "Turkish_breakfast",
+    "ムサカ":                "Moussaka",
+    "スブラキ":              "Souvlaki",
+    "ギリシャサラダ":        "Greek_salad",
+    "ウゾ":                  "Ouzo",
+    "バクラバ":              "Baklava",
+    "フレッシュシーフード":  "Seafood",
+    "ファヴァ":              "Fava_bean",
+    "トマトのフリッター":    "Tomato",
+    "アシルティコ":          "Assyrtiko",
+    "サンセットカクテル":    "Cocktail",
+    "ニシンの酢漬け":        "Soused_herring",
+    "ストロープワッフェル":  "Stroopwafel",
+    "オランダチーズ":        "Gouda_cheese",
+    "パンネクーケン":        "Dutch_pancake",
+    "クラフトビール":        "Craft_beer",
+    "スヴィーチコバー":      "Svíčková",
+    "グラーシュ":            "Goulash",
+    "トルデルニーク":        "Trdelník",
+    "ピルスナー・ウルケル":  "Pilsner_Urquell",
+    "スヴァルコヴァー":      "Mulled_wine",
+    "ウィーナー・シュニッツェル": "Wiener_Schnitzel",
+    "ザッハートルテ":        "Sachertorte",
+    "アプフェルシュトゥルーデル": "Apfelstrudel",
+    "メランジュ":            "Vienna_coffee",
+    "グリューナー・ヴェルトリーナー": "Grüner_Veltliner",
+    "ペカ":                  "Peka_(food)",
+    "プルシュット":          "Prosciutto",
+    "グラシュ":              "Goulash",
+    "クロアチアワイン":      "Wine",
+}
+
 SAFETY_TIPS = {
     "バルセロナ 🇪🇸": [
         ("🚨 スリ多発", "ラス・ランブラスは世界屈指のスリ多発地帯。バッグは必ず体の前に。スマホをテーブルに置かない"),
@@ -722,7 +784,7 @@ st.sidebar.markdown(f"""
 **🏙️ 都市数:** {len(trip['cities'])}都市
 """)
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🗺️ マップ", "📅 しおり", "🥗 食材", "🚗 移動", "✅ 準備 & 予算"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["🗺️ マップ", "📅 しおり", "🍽️ グルメ", "🚗 移動", "✅ 準備 & 予算"])
 
 # ── Tab1: マップ ──
 with tab1:
@@ -762,20 +824,32 @@ with tab2:
                 unsafe_allow_html=True,
             )
 
-# ── Tab3: 食材 ──
+# ── Tab3: グルメ ──
 with tab3:
-    st.subheader("🥗 食材・名物ガイド")
+    st.subheader("🍽️ グルメガイド")
     city_names = [c["name"] for c in trip["cities"]]
     selected_city = st.selectbox("都市を選択", city_names, key="food_city")
     city = next(c for c in trip["cities"] if c["name"] == selected_city)
 
-    img_url = get_city_image(CITY_WIKI.get(city["name"], city["name"].split()[0]))
-    if img_url:
-        st.image(img_url, use_container_width=True, caption=city["name"])
-
-    st.markdown(f"**{city['name']} の名物食材・料理**")
+    st.markdown(f"**{city['name']} のおすすめグルメ**")
     for dish, desc in city["food"]:
-        st.markdown(f'<div class="food-card"><b style="color:#D96B5A;font-size:1rem;">🥘 {dish}</b><br><span style="font-size:0.88rem;color:#4A5568;margin-top:4px;display:block;">{desc}</span></div>', unsafe_allow_html=True)
+        wiki_query = DISH_WIKI.get(dish)
+        food_img_url = get_city_image(wiki_query) if wiki_query else None
+        col_img, col_text = st.columns([1, 2])
+        with col_img:
+            if food_img_url:
+                st.image(food_img_url, use_container_width=True)
+            else:
+                st.markdown('<div style="background:#FFF5F0;border-radius:10px;height:90px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">🍽️</div>', unsafe_allow_html=True)
+        with col_text:
+            st.markdown(
+                f'<div class="food-card" style="margin-bottom:0;">'
+                f'<b style="color:#D96B5A;font-size:1rem;">🍴 {dish}</b>'
+                f'<br><span style="font-size:0.88rem;color:#4A5568;margin-top:4px;display:block;">{desc}</span>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+        st.markdown("<div style='margin-bottom:8px;'></div>", unsafe_allow_html=True)
 
 # ── Tab4: 移動 ──
 with tab4:
