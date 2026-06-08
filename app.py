@@ -3,8 +3,99 @@ import folium
 from streamlit_folium import st_folium
 import pandas as pd
 from datetime import datetime
+import requests
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+
+@st.cache_data(ttl=86400)
+def get_city_image(wiki_query: str) -> str | None:
+    try:
+        url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{wiki_query.replace(' ', '_')}"
+        resp = requests.get(url, timeout=6, headers={"User-Agent": "HoneymoonApp/1.0"})
+        if resp.ok:
+            data = resp.json()
+            return (data.get("originalimage") or data.get("thumbnail") or {}).get("source")
+    except Exception:
+        pass
+    return None
+
+CITY_WIKI = {
+    "バルセロナ 🇪🇸":   "Sagrada_Família",
+    "パリ 🇫🇷":         "Eiffel_Tower",
+    "ローマ 🇮🇹":       "Colosseum",
+    "ヴェネツィア 🇮🇹": "Grand_Canal,_Venice",
+    "イスタンブール 🇹🇷": "Sultan_Ahmed_Mosque",
+    "カッパドキア 🇹🇷":  "Cappadocia",
+    "アテネ 🇬🇷":       "Acropolis_of_Athens",
+    "サントリーニ 🇬🇷":  "Oia,_Santorini",
+    "アムステルダム 🇳🇱": "Amsterdam",
+    "プラハ 🇨🇿":       "Charles_Bridge",
+    "ウィーン 🇦🇹":     "Schönbrunn_Palace",
+    "ドゥブロヴニク 🇭🇷": "Dubrovnik",
+}
+
+SAFETY_TIPS = {
+    "バルセロナ 🇪🇸": [
+        ("🚨 スリ多発", "ラス・ランブラスは世界屈指のスリ多発地帯。バッグは必ず体の前に。スマホをテーブルに置かない"),
+        ("💐 花詐欺", "花を渡してきて強引にチップを要求する手口が多い。受け取らないこと"),
+        ("🏧 ATM", "人通りの少ない場所のATMは避け、銀行内のATMを利用する"),
+    ],
+    "パリ 🇫🇷": [
+        ("🚨 スリ", "エッフェル塔・ルーブル周辺・メトロで多発。背負いリュックは正面に"),
+        ("✍️ 署名詐欺", "「アンケートに署名を」と近づきチップを要求。関わらないこと"),
+        ("🌙 夜間の注意", "モンマルトル・北駅周辺は夜間の一人歩きを避けること"),
+    ],
+    "ローマ 🇮🇹": [
+        ("🚨 スリ", "コロッセオ・バチカン周辺・バス32番線で多発。財布はズボンの前ポケットに"),
+        ("👧 子供グループ", "子供を使ったグループ詐欺に注意。新聞を向けながら近づく手口"),
+        ("💎 宝石詐欺", "道で宝石を拾ったと言って売りつける手口。完全に無視する"),
+    ],
+    "ヴェネツィア 🇮🇹": [
+        ("🚤 水上タクシー", "料金表のない水上タクシーはぼったくりの可能性。必ず乗車前に料金確認"),
+        ("🕊️ 鳩エサやり禁止", "サン・マルコ広場での鳩へのエサやりは違反・高額罰金あり"),
+        ("💧 水", "観光地のカフェは着席すると料金が高い。テイクアウトかスタンドを活用"),
+    ],
+    "イスタンブール 🇹🇷": [
+        ("🍻 バー詐欺", "親切に話しかけてバーへ誘導し、法外な請求書を出す手口（ゴットファーザー詐欺）。一人では行かない"),
+        ("💈 靴磨き詐欺", "わざとブラシを落として靴磨きを強要する手口。断ってOK"),
+        ("💱 両替", "グランドバザール周辺の非公式両替は詐欺率が高い。銀行・ATMを使う"),
+    ],
+    "カッパドキア 🇹🇷": [
+        ("🎈 熱気球会社", "安い会社は整備が不十分な場合も。必ず認定会社を選び事前予約する"),
+        ("☀️ 日焼け・熱中症", "標高1,000m以上で日差しが強い。帽子・水は必須"),
+        ("🛵 バイクレンタル", "道が悪い場所も多い。慣れていない場合はガイドツアーが安全"),
+    ],
+    "アテネ 🇬🇷": [
+        ("🚨 スリ", "アクロポリス周辺・モナスティラキ広場で多発。特に混雑時注意"),
+        ("🍺 バー詐欺", "観光客を高い店へ誘導する詐欺あり。地元客が使う店を選ぶ"),
+        ("🏧 偽ATM", "外装が怪しいATMは避ける。銀行内のATMが安全"),
+    ],
+    "サントリーニ 🇬🇷": [
+        ("📸 崖の写真撮影", "イアの絶景スポットは柵がない場所も。写真に夢中になりすぎず足元に注意"),
+        ("🛵 バイクレンタル", "観光客の事故が多い。狭い道・坂道が多いので経験者以外は要注意"),
+        ("🌊 遊泳", "一部ビーチは波が強い。赤旗が立っているときは遊泳禁止"),
+    ],
+    "アムステルダム 🇳🇱": [
+        ("🚲 自転車に注意", "歩行者が自転車レーンを歩くと危険。白線の内側は自転車専用"),
+        ("🔒 自転車窃盗", "自転車をレンタルする場合、鍵は2つ以上かけること"),
+        ("🌿 コーヒーショップ", "大麻合法だが公共の場での喫煙は違反。観光客もルールを守ること"),
+    ],
+    "プラハ 🇨🇿": [
+        ("🚕 タクシー詐欺", "流しのタクシーは高額請求が多い。必ずBolt/Uberアプリを使う"),
+        ("💱 両替詐欺", "空港・駅の私設両替所はレートが悪い。ATM（手数料に注意）か銀行で"),
+        ("🍺 バー会計", "観光地の店では請求書を必ず確認。英語メニューと価格を事前に確認"),
+    ],
+    "ウィーン 🇦🇹": [
+        ("🎟️ チケット詐欺", "駅周辺でモーツァルトコンサートチケットを売る業者は定価の倍以上。公式サイトで購入"),
+        ("🚇 地下鉄スリ", "Uバーンの混雑時はバッグに注意。観光ルート（1号線）で多発"),
+        ("💶 偽の警官", "制服を着た人が財布の確認を求めることがある。本物の警官は求めない"),
+    ],
+    "ドゥブロヴニク 🇭🇷": [
+        ("☀️ 城壁の熱中症", "夏の城壁ウォークは直射日光で非常に暑い。朝8時か夕方に行くこと。水必携"),
+        ("🚢 クルーズ客の混雑", "夏はクルーズ船の乗客で旧市街が激混み。朝早くか夜に行くと空いている"),
+        ("💰 物価", "観光地価格が高い。旧市街外のレストランを探すと大幅に安くなる"),
+    ],
+}
 
 SPREADSHEET_ID = st.secrets.get("SPREADSHEET_ID", "1eG_r-ylF9xc40sg717ZBxBQ9-zrPoMpTi32vovSCfZ4")
 SHEET_NAME = "予算管理"
@@ -646,11 +737,30 @@ with tab2:
     selected_city = st.selectbox("都市を選択", city_names)
     city = next(c for c in trip["cities"] if c["name"] == selected_city)
 
+    # 都市の写真
+    img_url = get_city_image(CITY_WIKI.get(city["name"], city["name"].split()[0]))
+    if img_url:
+        st.image(img_url, use_container_width=True, caption=city["name"])
+
     st.markdown(f'<div class="city-card"><b style="color:#C9974C;font-family:Playfair Display,serif;font-size:1.1rem;">{city["name"]}</b><span style="color:#718096;font-size:0.88rem;margin-left:10px;">📅 {city["stay"]}</span></div>', unsafe_allow_html=True)
     for day, plan in city["itinerary"]:
         with st.expander(f"📌 {day}", expanded=True):
             st.write(plan)
     st.markdown(f'<div class="tip-box">💡 <b style="color:#4A8063;">現地のコツ：</b> {city["tip"]}</div>', unsafe_allow_html=True)
+
+    # 安全情報
+    tips = SAFETY_TIPS.get(city["name"], [])
+    if tips:
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("#### 🛡️ 安全・注意情報")
+        for icon_title, desc in tips:
+            st.markdown(
+                f'<div class="move-card" style="border-left-color:#E07B6A;">'
+                f'<b style="color:#C0392B;">{icon_title}</b>'
+                f'<span style="color:#4A5568;font-size:0.88rem;margin-left:8px;">{desc}</span>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
 
 # ── Tab3: グルメ ──
 with tab3:
@@ -658,6 +768,10 @@ with tab3:
     city_names = [c["name"] for c in trip["cities"]]
     selected_city = st.selectbox("都市を選択", city_names, key="food_city")
     city = next(c for c in trip["cities"] if c["name"] == selected_city)
+
+    img_url = get_city_image(CITY_WIKI.get(city["name"], city["name"].split()[0]))
+    if img_url:
+        st.image(img_url, use_container_width=True, caption=city["name"])
 
     st.markdown(f"**{city['name']} のおすすめグルメ**")
     for dish, desc in city["food"]:
