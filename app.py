@@ -71,19 +71,169 @@ def load_budget_from_sheets(trip_label):
 st.set_page_config(page_title="💑 ハネムーン旅行プランナー", page_icon="💑", layout="wide")
 
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-    .main-title  { font-size: 2.2rem; font-weight: bold; text-align: center; color: #c0392b; padding: 10px 0 5px; }
-    .sub-title   { font-size: 1rem; text-align: center; color: #555 !important; margin-bottom: 20px; }
-    .city-card   { background: #fff8f8; border-left: 5px solid #e74c3c; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; color: #1a1a1a !important; }
-    .city-card * { color: #1a1a1a !important; }
-    .food-card   { background: #fffbf0; border-left: 5px solid #f39c12; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; color: #1a1a1a !important; }
-    .food-card * { color: #1a1a1a !important; }
-    .move-card   { background: #eaf4ff; border-left: 5px solid #2980b9; padding: 10px 14px; border-radius: 8px; margin-bottom: 10px; color: #1a1a1a !important; }
-    .move-card * { color: #1a1a1a !important; }
-    .tip-box     { background: #f0fff4; border: 1px solid #27ae60; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; color: #1a1a1a !important; }
-    .tip-box *   { color: #1a1a1a !important; }
-    .budget-box  { background: #fff0f0; border: 2px solid #e74c3c; padding: 16px; border-radius: 10px; text-align: center; color: #1a1a1a !important; }
-    .budget-box *{ color: #1a1a1a !important; }
+    /* ── 変数 ── */
+    :root {
+        --navy:   #1B2A4A;
+        --gold:   #C9974C;
+        --coral:  #D96B5A;
+        --sage:   #4A8063;
+        --sky:    #4A7FB5;
+        --cream:  #FAFAF7;
+        --white:  #FFFFFF;
+        --text:   #2D3748;
+        --muted:  #718096;
+        --shadow: 0 4px 20px rgba(27,42,74,0.10);
+        --shadow-lg: 0 8px 32px rgba(27,42,74,0.18);
+    }
+
+    /* ── グローバル ── */
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+
+    /* ── ヒーローヘッダー ── */
+    .hero-header {
+        background: linear-gradient(135deg, #1B2A4A 0%, #243868 60%, #1B2A4A 100%);
+        padding: 44px 24px 36px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 28px;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-header::before {
+        content: '';
+        position: absolute;
+        top: -80px; left: -80px;
+        width: 260px; height: 260px;
+        background: radial-gradient(circle, rgba(201,151,76,0.18) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .hero-header::after {
+        content: '';
+        position: absolute;
+        bottom: -60px; right: -60px;
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, rgba(217,107,90,0.12) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .main-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #FFFFFF !important;
+        letter-spacing: 1px;
+        margin: 0 0 10px;
+        position: relative; z-index: 1;
+    }
+    .sub-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        color: #C9974C !important;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin: 0;
+        position: relative; z-index: 1;
+    }
+
+    /* ── サイドバー ── */
+    section[data-testid="stSidebar"] > div:first-child {
+        background: linear-gradient(180deg, #1B2A4A 0%, #243556 100%);
+    }
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span,
+    section[data-testid="stSidebar"] div { color: #E2E8F0 !important; }
+    section[data-testid="stSidebar"] .stSelectbox label { color: #C9974C !important; font-weight: 600; }
+
+    /* ── タブ ── */
+    .stTabs [data-baseweb="tab-list"] { gap: 6px; }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 10px 10px 0 0;
+        padding: 10px 22px;
+        font-weight: 500;
+        color: var(--muted);
+        transition: all 0.2s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #1B2A4A, #2D4A7A) !important;
+        color: white !important;
+    }
+
+    /* ── カード共通 ── */
+    .city-card, .food-card, .move-card {
+        background: var(--white);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        box-shadow: var(--shadow);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        animation: fadeUp 0.35s ease;
+        color: var(--text) !important;
+    }
+    .city-card *, .food-card *, .move-card * { color: var(--text) !important; }
+
+    .city-card  { border-left: 5px solid var(--gold); }
+    .food-card  { border-left: 5px solid var(--coral); }
+    .move-card  { border-left: 5px solid var(--sky); }
+
+    .city-card:hover  { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .food-card:hover  { transform: translateX(5px); }
+    .move-card:hover  { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+    /* ── ヒントボックス ── */
+    .tip-box {
+        background: linear-gradient(135deg, #EEF7F2 0%, #F5FBF7 100%);
+        border: 1.5px solid #A8D5B8;
+        border-radius: 14px;
+        padding: 14px 18px;
+        font-size: 0.92rem;
+        color: #2D4A38 !important;
+        margin-top: 12px;
+        box-shadow: 0 2px 10px rgba(74,128,99,0.10);
+    }
+    .tip-box * { color: #2D4A38 !important; }
+
+    /* ── 予算ボックス ── */
+    .budget-box {
+        background: linear-gradient(135deg, #1B2A4A 0%, #2D4A7A 100%);
+        border-radius: 18px;
+        padding: 28px 20px;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(27,42,74,0.28);
+        color: white !important;
+        position: relative;
+        overflow: hidden;
+    }
+    .budget-box::before {
+        content: '✈';
+        position: absolute;
+        font-size: 5rem;
+        opacity: 0.05;
+        right: 16px; bottom: -10px;
+    }
+    .budget-box * { color: white !important; }
+
+    /* ── Sheetsリンク ── */
+    .sheets-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: linear-gradient(135deg, #0F9D58, #34A853);
+        color: white !important;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(15,157,88,0.30);
+        transition: opacity 0.2s;
+    }
+    .sheets-link:hover { opacity: 0.85; }
+
+    /* ── アニメーション ── */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -404,8 +554,12 @@ def make_map(trip_data, color_map={"red": "#e74c3c", "blue": "#2980b9", "green":
 # ============================================================
 # UI
 # ============================================================
-st.markdown('<div class="main-title">💑 ハネムーン旅行プランナー</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">3年計画 ヨーロッパ・トルコ・ギリシャ完全版</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="hero-header">
+    <div class="main-title">💑 ハネムーン旅行プランナー</div>
+    <div class="sub-title">3 Years Plan · Europe · Turkey · Greece</div>
+</div>
+""", unsafe_allow_html=True)
 
 trip_name = st.sidebar.selectbox("🗓️ 旅行を選択", list(TRIPS.keys()))
 trip = TRIPS[trip_name]
@@ -432,11 +586,11 @@ with tab2:
     selected_city = st.selectbox("都市を選択", city_names)
     city = next(c for c in trip["cities"] if c["name"] == selected_city)
 
-    st.markdown(f'<div class="city-card"><b style="color:#c0392b;">{city["name"]}</b><span style="color:#444;"> ／ {city["stay"]}</span></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="city-card"><b style="color:#C9974C;font-family:Playfair Display,serif;font-size:1.1rem;">{city["name"]}</b><span style="color:#718096;font-size:0.88rem;margin-left:10px;">📅 {city["stay"]}</span></div>', unsafe_allow_html=True)
     for day, plan in city["itinerary"]:
         with st.expander(f"📌 {day}", expanded=True):
             st.write(plan)
-    st.markdown(f'<div class="tip-box">💡 <b style="color:#1e8449;">現地のコツ：</b><span style="color:#1a1a1a;"> {city["tip"]}</span></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="tip-box">💡 <b style="color:#4A8063;">現地のコツ：</b> {city["tip"]}</div>', unsafe_allow_html=True)
 
 # ── Tab3: グルメ ──
 with tab3:
@@ -447,13 +601,13 @@ with tab3:
 
     st.markdown(f"**{city['name']} のおすすめグルメ**")
     for dish, desc in city["food"]:
-        st.markdown(f'<div class="food-card"><b style="color:#b7770d;">🍴 {dish}</b><br><span style="font-size:0.9rem;color:#333;">{desc}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="food-card"><b style="color:#D96B5A;font-size:1rem;">🍴 {dish}</b><br><span style="font-size:0.88rem;color:#4A5568;margin-top:4px;display:block;">{desc}</span></div>', unsafe_allow_html=True)
 
 # ── Tab4: 移動 ──
 with tab4:
     st.subheader("🚗 移動・交通情報")
     for city in trip["cities"]:
-        st.markdown(f'<div class="move-card"><b style="color:#1a5276;">📍 {city["name"]}</b><br><span style="color:#1a1a1a;">{city["move_next"]}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="move-card"><b style="color:#4A7FB5;font-size:1rem;">📍 {city["name"]}</b><br><span style="color:#4A5568;font-size:0.88rem;margin-top:4px;display:block;">{city["move_next"]}</span></div>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("**✈️ 東京からの直行便**")
@@ -487,8 +641,8 @@ with tab5:
 
         # ── Sheetsリンク ──
         st.markdown(
-            '📊 <a href="https://docs.google.com/spreadsheets/d/1eG_r-ylF9xc40sg717ZBxBQ9-zrPoMpTi32vovSCfZ4/edit" '
-            'target="_blank" style="color:#1a73e8;font-weight:bold;">Google スプレッドシートを開く →</a>',
+            '<a href="https://docs.google.com/spreadsheets/d/1eG_r-ylF9xc40sg717ZBxBQ9-zrPoMpTi32vovSCfZ4/edit" '
+            'target="_blank" class="sheets-link">📊 Google スプレッドシートを開く →</a>',
             unsafe_allow_html=True,
         )
 
@@ -526,7 +680,7 @@ with tab5:
                 st.session_state[state_key] = new_budget
 
         st.markdown("---")
-        st.markdown(f'<div class="budget-box"><h3 style="color:#c0392b;margin:0;">💴 合計: ¥{total:,}</h3><p style="margin:5px 0 0;color:#555;font-weight:bold;">2人で: ¥{total*2:,}</p></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="budget-box"><p style="color:#C9974C;font-size:0.8rem;letter-spacing:3px;text-transform:uppercase;margin:0 0 8px;">Total Budget</p><h2 style="color:white;margin:0;font-family:Playfair Display,serif;font-size:2rem;">¥{total:,}</h2><p style="color:rgba(255,255,255,0.7);margin:6px 0 0;font-size:0.9rem;">2人合計 ¥{total*2:,}</p></div>', unsafe_allow_html=True)
 
         st.markdown("---")
         st.markdown("**📊 内訳グラフ**")
