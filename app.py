@@ -722,7 +722,7 @@ st.sidebar.markdown(f"""
 **🏙️ 都市数:** {len(trip['cities'])}都市
 """)
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🗺️ マップ", "📅 しおり", "🍽️ グルメ", "🚗 移動", "✅ 準備 & 予算"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["🗺️ マップ", "📅 しおり", "🥗 食材", "🚗 移動", "✅ 準備 & 予算"])
 
 # ── Tab1: マップ ──
 with tab1:
@@ -762,9 +762,9 @@ with tab2:
                 unsafe_allow_html=True,
             )
 
-# ── Tab3: グルメ ──
+# ── Tab3: 食材 ──
 with tab3:
-    st.subheader("🍽️ グルメガイド")
+    st.subheader("🥗 食材・名物ガイド")
     city_names = [c["name"] for c in trip["cities"]]
     selected_city = st.selectbox("都市を選択", city_names, key="food_city")
     city = next(c for c in trip["cities"] if c["name"] == selected_city)
@@ -773,9 +773,9 @@ with tab3:
     if img_url:
         st.image(img_url, use_container_width=True, caption=city["name"])
 
-    st.markdown(f"**{city['name']} のおすすめグルメ**")
+    st.markdown(f"**{city['name']} の名物食材・料理**")
     for dish, desc in city["food"]:
-        st.markdown(f'<div class="food-card"><b style="color:#D96B5A;font-size:1rem;">🍴 {dish}</b><br><span style="font-size:0.88rem;color:#4A5568;margin-top:4px;display:block;">{desc}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="food-card"><b style="color:#D96B5A;font-size:1rem;">🥘 {dish}</b><br><span style="font-size:0.88rem;color:#4A5568;margin-top:4px;display:block;">{desc}</span></div>', unsafe_allow_html=True)
 
 # ── Tab4: 移動 ──
 with tab4:
